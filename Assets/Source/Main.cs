@@ -29,9 +29,10 @@ public class Main : MonoBehaviour {
             {
                 var n = Instantiate(templatePiece);
                 n.SetPieceImage(Sprite.Create(source, new Rect(i * pieceWidth, j * pieceHeight, pieceWidth, pieceHeight),
-                    new Vector2(0, 0)));
+                    new Vector2(0, 0)), i, j);
                 n.name = "Piece " + i +" "+ j;
-                n.gameObject.transform.SetParent(spritesRoot.transform);
+                n.gameObject.transform.SetParent(spritesRoot.transform, false);
+                //n.transform.position = new Vector3(i * pieceWidth, j * pieceHeight, 0);
             }
         }
     }

@@ -6,16 +6,28 @@ public class Piece : MonoBehaviour {
 
     private Vector3 screenPoint;
     private Vector3 offset;
-
-    public void SetPieceImage(Sprite newSprite)
+    private Sprite mySprite;
+    void Start()
     {
+        
+        
+    }
+
+
+    public void SetPieceImage(Sprite newSprite, int i, int j)
+    {
+        var rectTransform = GetComponent<RectTransform>();
+        if (rectTransform == null) Debug.LogError("where is the rect?");
+
+        mySprite = newSprite;
+
         var sr = gameObject.GetComponent<Image>();
         sr.sprite = newSprite;
+        rectTransform.sizeDelta = new Vector2(newSprite.bounds.size.x*100, newSprite.bounds.size.y*100);
+        transform.position = new Vector3(i*rectTransform.sizeDelta.x, j*rectTransform.sizeDelta.y, 0);
     }
 
-    void Start(){
-        Debug.Log("iiii");
-    }
+    
 
 
     void Update(){

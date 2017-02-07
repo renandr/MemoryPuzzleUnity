@@ -1,15 +1,43 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Main : MonoBehaviour {
+    public static Camera Camera;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
+    public Camera MainCamera;
+
+    public Texture2D source;
+    public GameObject spritesRoot;
+    public Piece templatePiece;
+
+    void Start () {
+        Camera = MainCamera;
+        Croppy();
+    }
+
+    private void Croppy(){
+        int iTotal = 4;
+        int jTotal = 4;
+        int pieceWidth = source.width / iTotal;
+        int pieceHeight = source.height / jTotal;
+
+        Debug.Log(source.width + "x" + source.height);
+        Debug.Log(pieceWidth + "x" + pieceHeight);
+
+        for (int i = 0; i < iTotal; i++)
+        {
+            for (int j = 0; j < jTotal; j++)
+            {
+                var n = Instantiate(templatePiece);
+                n.SetPieceImage(Sprite.Create(source, new Rect(i * pieceWidth, j * pieceHeight, pieceWidth, pieceHeight),
+                    new Vector2(0, 0)));
+                n.name = "Piece " + i +" "+ j;
+                n.gameObject.transform.SetParent(spritesRoot.transform);
+            }
+        }
+    }
+
 	
-	// Update is called once per frame
+	
 	void Update () {
 		
 	}

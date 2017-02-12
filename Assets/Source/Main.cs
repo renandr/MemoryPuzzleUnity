@@ -95,7 +95,7 @@ public class Main : MonoBehaviour {
         int newPosX = (int)Math.Round(piece.transform.localPosition.x / pieceWidth);
         int newPosY = (int)Math.Round(piece.transform.localPosition.y / pieceHeight);
         
-        if (true || slots[newPosX][newPosY] == null) {
+        if (slots[newPosX][newPosY] == null) {
             piece.transform.localPosition = GetGridSnappedPosition(piece.gameObject.transform.localPosition);
         } else {
             piece.transform.localPosition = GetGridSnappedPosition(GetPositionForSlot(piece.currentGridX, piece.currentGridY));

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Grid : MonoBehaviour {
@@ -32,12 +31,7 @@ public class Grid : MonoBehaviour {
 
     private void UpdatePieceGrid() {
         Vector2 gridSize = GetSquariestGridSizes(allPieces.Count);
-        
-        var pieceWidth = canvasRect.sizeDelta.x / gridSize.x;
-        var pieceHeight = myRectTransform.sizeDelta.y / gridSize.y;
-        Vector2 originalPieceSize = PieceTemplate.ReferenceSize;
-        pieceHeight = Mathf.Min(pieceHeight, originalPieceSize.y / originalPieceSize.x * pieceWidth);
-        Vector2 pieceSize = new Vector2(pieceWidth, pieceHeight);
+        Vector2 pieceSize = new Vector2(canvasRect.sizeDelta.x / gridSize.x, myRectTransform.sizeDelta.y / gridSize.y);
         
         int yCount=0, xCount = 0;
         for (int pieceIndex = 0; pieceIndex < allPieces.Count; pieceIndex++) {
@@ -66,10 +60,7 @@ public class Grid : MonoBehaviour {
         // increase the grid size to acomodate pieces in case there's no square grid possible
         baseSize.y += (amountSqrt > baseSquareSide) ? 1 : 0;
         baseSize.x += (amountSqrt % baseSquareSide >= .5) ? 1 : 0;
-
-        //change the aspect ratio
-
-
+        
         return baseSize;
     }
 

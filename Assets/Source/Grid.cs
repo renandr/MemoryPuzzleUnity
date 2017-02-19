@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GamigoPieceGrid : MonoBehaviour {
+public class Grid : MonoBehaviour {
 
-    public GameObject PieceTemplate;
+    public Piece PieceTemplate;
+    public float ProportionalPadding = .1f;
 
     private RectTransform canvasRect;
     private RectTransform myRectTransform;
 
-    private readonly List<GameObject> allPieces = new List<GameObject>();
+    private readonly List<Piece> allPieces = new List<Piece>();
 
     
     private void Awake () {
@@ -30,18 +31,19 @@ public class GamigoPieceGrid : MonoBehaviour {
     }
 
     private void UpdatePieceGrid() {
-        Debug.Log("size" + myRectTransform.sizeDelta);
-        Debug.Log("canvas" + canvasRect.sizeDelta);
-
         Vector2 gridSize = GetSquariestGridSizes(allPieces.Count);
-        Vector2 pieceSize = new Vector2(canvasRect.sizeDelta.x / gridSize.x, myRectTransform.sizeDelta.y / gridSize.y);
-
+        
+        var pieceWidth = canvasRect.sizeDelta.x / gridSize.x;
+        var pieceHeight = myRectTransform.sizeDelta.y / gridSize.y;
+        Vector2 originalPieceSize = PieceTemplate.ReferenceSize;
+        pieceHeight = Mathf.Min(pieceHeight, originalPieceSize.y / originalPieceSize.x * pieceWidth);
+        Vector2 pieceSize = new Vector2(pieceWidth, pieceHeight);
+        
         int yCount=0, xCount = 0;
         for (int pieceIndex = 0; pieceIndex < allPieces.Count; pieceIndex++) {
-            GameObject piece = allPieces[pieceIndex];
-            //TODO create a piece class that doesn't require the get component
-            var pieceRect = piece.GetComponent<RectTransform>();
-            pieceRect.sizeDelta = pieceSize;
+            Piece piece = allPieces[pieceIndex];
+            
+            piece.GetComponent<RectTransform>().sizeDelta = pieceSize*(1-ProportionalPadding);
 
             piece.transform.localPosition = new Vector3(
                 (pieceSize.x * xCount) + pieceSize.x * .5f,
@@ -62,8 +64,11 @@ public class GamigoPieceGrid : MonoBehaviour {
         var baseSize = new Vector2(baseSquareSide, baseSquareSide);
 
         // increase the grid size to acomodate pieces in case there's no square grid possible
-        baseSize.x += (amountSqrt > baseSquareSide) ? 1 : 0;
-        baseSize.y += (amountSqrt % baseSquareSide >= .5) ? 1 : 0;
+        baseSize.y += (amountSqrt > baseSquareSide) ? 1 : 0;
+        baseSize.x += (amountSqrt % baseSquareSide >= .5) ? 1 : 0;
+
+        //change the aspect ratio
+
 
         return baseSize;
     }

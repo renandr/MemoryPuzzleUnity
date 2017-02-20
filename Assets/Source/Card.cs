@@ -19,7 +19,10 @@ public class Card : MonoBehaviour {
     }
 
     public void OnClick() {
-        animator.SetTrigger(isShowing?"HideMe":"ShowMe");
+        Gameplay.CardClicked(this);
+    }
+    public void Select() {
+        animator.SetTrigger(isShowing ? "HideMe" : "ShowMe");
         isShowing = !isShowing;
         transform.SetAsLastSibling();
     }

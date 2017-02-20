@@ -8,7 +8,15 @@ public class Gameplay : MonoBehaviour {
     public Card CardTemplate;
     public Grid CardGrid;
     public List<Sprite> Faces;
-    
+
+    private Card firstCardOfPair;
+    private Card secondCardOfPair;
+
+    private static Gameplay singleton;
+
+    void Awake() {
+        singleton = this;
+    }
 
 	void Start () {
         var cards = new List<GameObject>();
@@ -26,7 +34,17 @@ public class Gameplay : MonoBehaviour {
         CardGrid.AddItems(cards);
     }
 	
-	void Update () {
-		
-	}
+	public static void CardClicked(Card card) {
+        singleton.SelectCard(card);
+    }
+    private void SelectCard(Card card) {
+        if (!firstCardOfPair) {
+            firstCardOfPair = card;
+            card.Select();
+
+        } else if(card != firstCardOfPair && !secondCardOfPair) {
+            secondCardOfPair = card;
+            card.Select();
+        }
+    }
 }

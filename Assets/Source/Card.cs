@@ -2,22 +2,25 @@
 using UnityEngine.UI;
 
 public class Card : MonoBehaviour {
+    
+    public Image face;
 
-    public Image imageTop;
-    public Image imageBottom;
+    private Animator animator;
+    private bool isShowing = false;
+    private int index;
 
-    Animator animator;
-    bool isShowing = false;
-
-    // Use this for initialization
     void Start() {
         animator = GetComponent<Animator>();
+    }
+
+    public void SetFace(Sprite sprite, int index) {
+        this.index = index;
+        face.sprite = sprite;
     }
 
     public void OnClick() {
         animator.SetTrigger(isShowing?"HideMe":"ShowMe");
         isShowing = !isShowing;
-        Debug.Log(isShowing);
         transform.SetAsLastSibling();
     }
 }

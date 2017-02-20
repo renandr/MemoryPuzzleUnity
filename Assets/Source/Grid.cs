@@ -3,15 +3,13 @@ using UnityEngine;
 
 public class Grid : MonoBehaviour {
 
-    public Card CardTemplate;
-
     [Range(0, 0.4f)]
     public float ProportionalPadding;
 
     private RectTransform canvasRect;
     private RectTransform myRectTransform;
 
-    private readonly List<Card> allCards = new List<Card>();
+    private readonly List<GameObject> allItems = new List<GameObject>();
 
     private void Awake () {
         myRectTransform = GetComponent<RectTransform>();
@@ -19,33 +17,29 @@ public class Grid : MonoBehaviour {
     }
 
     private void Start() {
-        for (int pieceIndex = 0; pieceIndex < 20; pieceIndex++) {
-            //AddPiece();
-        }
+        
+    }
+    
+    public void AddItem(GameObject item) {
+        item.gameObject.transform.SetParent(transform, false);
+        allItems.Add(item);
+        UpdateGridSpacing();
     }
 
-    public void AddCard() {
-        var n = Instantiate(CardTemplate);
-        n.gameObject.transform.SetParent(transform, false);
-        allCards.Add(n);
-
-        UpdatePieceGrid();
-    }
-
-    private void UpdatePieceGrid() {
-        Vector2 gridSize = GetBestFitGridSizes(allCards.Count);
-        Vector2 pieceSize = new Vector2(canvasRect.sizeDelta.x / gridSize.x, myRectTransform.sizeDelta.y / gridSize.y);
+    private void UpdateGridSpacing() {
+        Vector2 gridSize = GetBestFitGridSizes(allItems.Count);
+        Vector2 itemSize = new Vector2(canvasRect.sizeDelta.x / gridSize.x, myRectTransform.sizeDelta.y / gridSize.y);
         
         int yCount=0, xCount = 0;
-        for (int pieceIndex = 0; pieceIndex < allCards.Count; pieceIndex++) {
-            Card piece = allCards[pieceIndex];
-            
-            piece.GetComponent<RectTransform>().sizeDelta = pieceSize*(1-ProportionalPadding);
+        for (int i = 0; i < allItems.Count; i++) {
+            GameObject item = allItems[i];
 
-            piece.transform.localPosition = new Vector3(
-                (pieceSize.x * xCount) + pieceSize.x * .5f,
-                (-pieceSize.y * yCount)- pieceSize.y * .5f,
-                piece.transform.localPosition.z
+            item.GetComponent<RectTransform>().sizeDelta = itemSize * (1-ProportionalPadding);
+
+            item.transform.localPosition = new Vector3(
+                (itemSize.x * xCount) + itemSize.x * .5f,
+                (-itemSize.y * yCount)- itemSize.y * .5f,
+                item.transform.localPosition.z
                 );
 
             bool lineFinished = (xCount == gridSize.x-1);

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class Piece : MonoBehaviour {
+public class Card : MonoBehaviour {
 
     public Image imageTop;
     public Image imageBottom;

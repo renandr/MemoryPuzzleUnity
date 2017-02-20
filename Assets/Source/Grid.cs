@@ -3,15 +3,16 @@ using UnityEngine;
 
 public class Grid : MonoBehaviour {
 
-    public Piece PieceTemplate;
-    public float ProportionalPadding = .1f;
+    public Card CardTemplate;
+
+    [Range(0, 0.4f)]
+    public float ProportionalPadding;
 
     private RectTransform canvasRect;
     private RectTransform myRectTransform;
 
-    private readonly List<Piece> allPieces = new List<Piece>();
+    private readonly List<Card> allCards = new List<Card>();
 
-    
     private void Awake () {
         myRectTransform = GetComponent<RectTransform>();
         canvasRect = GetComponentInParent<Canvas>().GetComponent<RectTransform>();
@@ -23,21 +24,21 @@ public class Grid : MonoBehaviour {
         }
     }
 
-    public void AddPiece() {
-        var n = Instantiate(PieceTemplate);
+    public void AddCard() {
+        var n = Instantiate(CardTemplate);
         n.gameObject.transform.SetParent(transform, false);
-        allPieces.Add(n);
+        allCards.Add(n);
 
         UpdatePieceGrid();
     }
 
     private void UpdatePieceGrid() {
-        Vector2 gridSize = GetSquariestGridSizes(allPieces.Count);
+        Vector2 gridSize = GetBestFitGridSizes(allCards.Count);
         Vector2 pieceSize = new Vector2(canvasRect.sizeDelta.x / gridSize.x, myRectTransform.sizeDelta.y / gridSize.y);
         
         int yCount=0, xCount = 0;
-        for (int pieceIndex = 0; pieceIndex < allPieces.Count; pieceIndex++) {
-            Piece piece = allPieces[pieceIndex];
+        for (int pieceIndex = 0; pieceIndex < allCards.Count; pieceIndex++) {
+            Card piece = allCards[pieceIndex];
             
             piece.GetComponent<RectTransform>().sizeDelta = pieceSize*(1-ProportionalPadding);
 
@@ -53,7 +54,7 @@ public class Grid : MonoBehaviour {
         }
     }
 
-    private static Vector2 GetSquariestGridSizes(int amountOfPieces) {
+    private static Vector2 GetBestFitGridSizes(int amountOfPieces) {
         //get the nearest smaller square for a grid size
         float amountSqrt = Mathf.Sqrt(amountOfPieces);
         int baseSquareSide = (int)Mathf.Floor(amountSqrt);

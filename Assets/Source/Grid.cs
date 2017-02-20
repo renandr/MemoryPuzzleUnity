@@ -18,7 +18,9 @@ public class Grid : MonoBehaviour {
     }
 
     private void Start() {
-      
+        for (int pieceIndex = 0; pieceIndex < 20; pieceIndex++) {
+            //AddPiece();
+        }
     }
 
     public void AddPiece() {

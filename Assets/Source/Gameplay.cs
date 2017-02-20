@@ -1,6 +1,7 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+
 
 public class Gameplay : MonoBehaviour {
 
@@ -20,6 +21,8 @@ public class Gameplay : MonoBehaviour {
             cPair.SetFace(Faces[iFace], iFace);
             cards.Add(cPair.gameObject);
         }
+
+        new System.Random().Shuffle(cards);
         CardGrid.AddItems(cards);
     }
 	

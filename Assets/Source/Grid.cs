@@ -9,7 +9,7 @@ public class Grid : MonoBehaviour {
     private RectTransform canvasRect;
     private RectTransform myRectTransform;
 
-    private readonly List<GameObject> allItems = new List<GameObject>();
+    private List<GameObject> allItems = new List<GameObject>();
 
     private void Awake () {
         myRectTransform = GetComponent<RectTransform>();
@@ -20,9 +20,8 @@ public class Grid : MonoBehaviour {
         
     }
     
-    public void AddItem(GameObject item) {
-        item.gameObject.transform.SetParent(transform, false);
-        allItems.Add(item);
+    public void AddItems(List<GameObject> items) {
+        allItems = items;
         UpdateGridSpacing();
     }
 
@@ -33,6 +32,7 @@ public class Grid : MonoBehaviour {
         int yCount=0, xCount = 0;
         for (int i = 0; i < allItems.Count; i++) {
             GameObject item = allItems[i];
+            item.gameObject.transform.SetParent(transform, false);
 
             item.GetComponent<RectTransform>().sizeDelta = itemSize * (1-ProportionalPadding);
 

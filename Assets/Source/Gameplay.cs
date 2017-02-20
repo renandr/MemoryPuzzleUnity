@@ -10,15 +10,17 @@ public class Gameplay : MonoBehaviour {
     
 
 	void Start () {
+        var cards = new List<GameObject>();
         for (int iFace = 0; iFace < Faces.Count; iFace++) {
             Card c = Instantiate(CardTemplate);
             c.SetFace(Faces[iFace], iFace);
-            CardGrid.AddItem(c.gameObject);
+            cards.Add(c.gameObject);
 
             var cPair = Instantiate(CardTemplate);
             cPair.SetFace(Faces[iFace], iFace);
-            CardGrid.AddItem(cPair.gameObject);
+            cards.Add(cPair.gameObject);
         }
+        CardGrid.AddItems(cards);
     }
 	
 	void Update () {

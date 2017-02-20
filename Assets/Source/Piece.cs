@@ -18,5 +18,6 @@ public class Piece : MonoBehaviour {
         animator.SetTrigger(isShowing?"HideMe":"ShowMe");
         isShowing = !isShowing;
         Debug.Log(isShowing);
+        transform.SetAsLastSibling();
     }
 }

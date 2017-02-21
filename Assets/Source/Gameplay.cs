@@ -8,7 +8,7 @@ public class Gameplay : MonoBehaviour {
 
     public Card CardTemplate;
     public Grid CardGrid;
-    public TopButtons TopButtons;
+    public TopControls TopControls;
     public float ShowAllCardsDelay;
     public float ShowAllCardsTime;
     public float ShowPairFailTime;
@@ -21,7 +21,7 @@ public class Gameplay : MonoBehaviour {
     private Card firstCardOfPair;
     private Card secondCardOfPair;
     private int pairsRemaining;
-
+    private float currentTime;
     
     void Awake() {
         singleton = this;
@@ -29,8 +29,8 @@ public class Gameplay : MonoBehaviour {
 
 	void Start () {
         CreateAllCards();
-        TopButtons.TogglePlay(true);
-        TopButtons.EnableControls(true);
+        TopControls.TogglePlay(true);
+        TopControls.EnableControls(true);
     }
 
     private void CreateAllCards() {
@@ -51,11 +51,12 @@ public class Gameplay : MonoBehaviour {
     public void StartGame() {
         StopAllCoroutines();
         firstCardOfPair = secondCardOfPair = null;
-        TopButtons.EnableControls(false);
-        TopButtons.TogglePlay(false);
+        TopControls.EnableControls(false);
+        TopControls.TogglePlay(false);
 
         pairsRemaining = Faces.Count;
-        
+        currentTime = FullGameTime;
+
         var cardGOsForGrid = new List<GameObject>();
         for (int i = 0; i < allCards.Count; i++) {
             Card card = allCards[i];
@@ -78,9 +79,18 @@ public class Gameplay : MonoBehaviour {
         for (int i = 0; i < allCards.Count; i++) {
             allCards[i].Hide();
         }
-        TopButtons.EnableControls(true);
+        TopControls.EnableControls(true);
     }
-    
+
+    private void Update() {
+       // if(currentTime >= 0) {
+            currentTime -= Time.deltaTime;
+            Debug.Log(string.Format("{0:0}", currentTime));
+        //} 
+    }
+
+
+
     public static void CardClicked(Card card) {
         singleton.SelectCard(card);
     }

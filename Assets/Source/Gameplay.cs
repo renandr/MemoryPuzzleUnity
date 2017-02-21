@@ -8,55 +8,66 @@ public class Gameplay : MonoBehaviour {
 
     public Card CardTemplate;
     public Grid CardGrid;
-    
+    public TopButtons TopButtons;
     public float ShowAllCardsDelay;
     public float ShowAllCardsTime;
     public float ShowPairFailTime;
-
+    public float FullGameTime;
     public List<Sprite> Faces;
     
-
     private static Gameplay singleton;
 
+    private List<Card> allCards;
     private Card firstCardOfPair;
     private Card secondCardOfPair;
     private int pairsRemaining;
 
-    private List<Card> allCards;
-
+    
     void Awake() {
         singleton = this;
     }
 
 	void Start () {
-        pairsRemaining = Faces.Count;
         CreateAllCards();
-        StartCoroutine(WaitAndShowAll());
+        TopButtons.TogglePlay(true);
+        TopButtons.EnableControls(true);
     }
+
     private void CreateAllCards() {
         allCards = new List<Card>();
-        var cardGOsForGrid = new List<GameObject>();
-
         for (int iFace = 0; iFace < Faces.Count; iFace++) {
-            Card card = CreateCard(iFace);
-            cardGOsForGrid.Add(card.gameObject);
-            allCards.Add(card);
-
-            Card pair = CreateCard(iFace);
-            cardGOsForGrid.Add(pair.gameObject);
-            allCards.Add(pair);
+            CreateCard(iFace);
+            CreateCard(iFace);
         }
-
-        new System.Random().Shuffle(cardGOsForGrid);
-        CardGrid.AddItems(cardGOsForGrid);
     }
 
     private Card CreateCard(int faceIndex) {
         Card c = Instantiate(CardTemplate);
         c.SetFace(Faces[faceIndex], faceIndex);
+        allCards.Add(c);
         return c;
     }
 
+    public void StartGame() {
+        StopAllCoroutines();
+        firstCardOfPair = secondCardOfPair = null;
+        TopButtons.EnableControls(false);
+        TopButtons.TogglePlay(false);
+
+        pairsRemaining = Faces.Count;
+        
+        var cardGOsForGrid = new List<GameObject>();
+        for (int i = 0; i < allCards.Count; i++) {
+            Card card = allCards[i];
+            card.Hide(false);
+            cardGOsForGrid.Add(card.gameObject);
+        }
+        new System.Random().Shuffle(cardGOsForGrid);
+        CardGrid.AddItems(cardGOsForGrid);
+
+        StartCoroutine(WaitAndShowAll());
+    }
+        
     private IEnumerator WaitAndShowAll() {
         yield return new WaitForSeconds(ShowAllCardsDelay);
         for (int i = 0; i < allCards.Count; i++) {
@@ -67,6 +78,7 @@ public class Gameplay : MonoBehaviour {
         for (int i = 0; i < allCards.Count; i++) {
             allCards[i].Hide();
         }
+        TopButtons.EnableControls(true);
     }
     
     public static void CardClicked(Card card) {
@@ -100,7 +112,6 @@ public class Gameplay : MonoBehaviour {
         }
     }
            
-
     private IEnumerator WaitAndHidePairFail() { 
         yield return new WaitForSeconds(ShowPairFailTime);
         firstCardOfPair.Hide();
@@ -108,4 +119,11 @@ public class Gameplay : MonoBehaviour {
         firstCardOfPair = secondCardOfPair = null;
     }
 
+    public void PauseGame() {
+
+    }
+
+    public void RestartGame() {
+        StartGame();
+    }
 }

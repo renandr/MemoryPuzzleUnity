@@ -37,13 +37,24 @@ public class Card : MonoBehaviour {
         transform.SetAsLastSibling();
     }
 
-    public void Hide() {
-        animator.SetTrigger("HideMe");
-        transform.SetAsLastSibling();
+    public void Hide(bool animate = true) {
+        if (animate) {
+            animator.SetTrigger("HideMe");
+            transform.SetAsLastSibling();
+        }else {
+            animator.Play("Iddle");
+            ResetTriggers();
+        }
     }
 
     public void Win() {
         animator.SetTrigger("Win");
         transform.SetAsLastSibling();
+    }
+
+    private void ResetTriggers() {
+        animator.ResetTrigger("HideMe");
+        animator.ResetTrigger("ShowMe");
+        animator.ResetTrigger("Win");
     }
 }

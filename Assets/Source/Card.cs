@@ -13,7 +13,12 @@ public class Card : MonoBehaviour {
             return index;
         }
     }
-
+    public bool IsFacingBack {
+        get {
+            return animator.GetCurrentAnimatorStateInfo(0).IsName("Iddle");
+        }
+    }
+    
     void Start() {
         animator = GetComponent<Animator>();
     }

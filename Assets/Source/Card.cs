@@ -42,7 +42,7 @@ public class Card : MonoBehaviour {
         face.sprite = sprite;
     }
 
-    public void OnClick() {
+    public void UI_OnClick() {
         Gameplay.CardClicked(this);
     }
 

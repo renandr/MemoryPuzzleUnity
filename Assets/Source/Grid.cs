@@ -61,4 +61,8 @@ public class Grid : MonoBehaviour {
         return baseSize;
     }
 
+    public void ToggleVisibility(bool visible) {
+        gameObject.GetComponent<CanvasGroup>().alpha = visible ? 1:.2f ;
+    }
+
 }

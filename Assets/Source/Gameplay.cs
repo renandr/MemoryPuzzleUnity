@@ -22,6 +22,7 @@ public class Gameplay : MonoBehaviour {
     private Card secondCardOfPair;
     private int pairsRemaining;
     private float currentTime;
+    private bool gameRunning;
     
     void Awake() {
         singleton = this;
@@ -48,11 +49,32 @@ public class Gameplay : MonoBehaviour {
         return c;
     }
 
-    public void StartGame() {
+    public void UI_PauseClicked() {
+        CardGrid.ToggleVisibility(false);
+        TopControls.TogglePlay(true);
+        gameRunning = false;
+    }
+
+    public void UI_ReplayClicked() {
+        StartGame();
+    }
+
+    public void UI_PlayClicked() {
+        if (pairsRemaining == 0) {
+            StartGame();
+        } else {
+            CardGrid.ToggleVisibility(true);
+            TopControls.TogglePlay(false);
+            gameRunning = true;
+        }
+    }
+
+    private void StartGame() {
         StopAllCoroutines();
         firstCardOfPair = secondCardOfPair = null;
         TopControls.EnableControls(false);
         TopControls.TogglePlay(false);
+        CardGrid.ToggleVisibility(true);
 
         pairsRemaining = Faces.Count;
         currentTime = FullGameTime;
@@ -68,7 +90,7 @@ public class Gameplay : MonoBehaviour {
 
         StartCoroutine(WaitAndShowAll());
     }
-        
+
     private IEnumerator WaitAndShowAll() {
         yield return new WaitForSeconds(ShowAllCardsDelay);
         for (int i = 0; i < allCards.Count; i++) {
@@ -80,23 +102,26 @@ public class Gameplay : MonoBehaviour {
             allCards[i].Hide();
         }
         TopControls.EnableControls(true);
+        gameRunning = true;
     }
 
     private void Update() {
-       // if(currentTime >= 0) {
+       if(gameRunning) {
             currentTime -= Time.deltaTime;
-            Debug.Log(string.Format("{0:0}", currentTime));
-        //} 
+            Debug.Log(string.Format("{0:00}:{1:00}", (int)(currentTime/60), (int)(currentTime % 60)));
+            if(currentTime <= 0) {
+                Debug.Log("YOU LOSE");
+                gameRunning = false;
+            }
+       } 
     }
-
-
 
     public static void CardClicked(Card card) {
         singleton.SelectCard(card);
     }
 
     private void SelectCard(Card card) {
-        if (!card.IsFacingBack) {
+        if (!gameRunning || !card.IsFacingBack) {
             return;
         }
         if (!firstCardOfPair) {
@@ -114,7 +139,7 @@ public class Gameplay : MonoBehaviour {
 
                 pairsRemaining--;
                 if (pairsRemaining == 0) {
-                    Debug.Log("GameOver");
+                    Debug.Log("YOU WIN");
                 }
             } else {
                 StartCoroutine(WaitAndHidePairFail());
@@ -129,11 +154,5 @@ public class Gameplay : MonoBehaviour {
         firstCardOfPair = secondCardOfPair = null;
     }
 
-    public void PauseGame() {
-
-    }
-
-    public void RestartGame() {
-        StartGame();
-    }
+    
 }

@@ -1,9 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Generic grid component for equally fitting elements the best way possibleinside it's own area
+/// </summary>
 public class Grid : MonoBehaviour {
 
     [Range(0, 0.4f)]
+    [Tooltip("A padding between items, proportional to the relative size of the item.")]
     public float ProportionalPadding;
 
     private RectTransform canvasRect;

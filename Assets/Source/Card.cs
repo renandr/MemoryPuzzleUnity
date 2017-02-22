@@ -1,12 +1,24 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Handles the view states of the card
+/// </summary>
 public class Card : MonoBehaviour {
-    
+
+    [Tooltip("The image assigned by the gameplay.")]
     public Image face;
 
     private Animator animator;
+
+    /// <summary>
+    /// Index of the face displayed
+    /// </summary>
     private int index;
+
+    /// <summary>
+    /// Used mainly for avoiding edge cases, like when the game finishes and the animation is still running
+    /// </summary>
     private bool isShowing;
 
     public int Index {
@@ -14,6 +26,7 @@ public class Card : MonoBehaviour {
             return index;
         }
     }
+
     public bool IsFacingBack {
         get {
             return animator.GetCurrentAnimatorStateInfo(0).IsName("Iddle");

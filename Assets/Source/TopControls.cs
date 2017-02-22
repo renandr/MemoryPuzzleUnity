@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Handles the view of the controls above the cards
+/// </summary>
 public class TopControls : MonoBehaviour {
 
     public Text TimerText;
@@ -26,10 +29,12 @@ public class TopControls : MonoBehaviour {
         }
     }
 
+    //TODO have a proper losing asset
     public void ShowLose() {
         TimerText.text = "YOU LOSE";
     }
 
+    //TODO have a proper winning asset
     public void ShowWin() {
         TimerText.text = "YOU WIN!";
     }

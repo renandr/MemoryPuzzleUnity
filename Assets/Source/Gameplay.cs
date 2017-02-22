@@ -32,6 +32,7 @@ public class Gameplay : MonoBehaviour {
         CreateAllCards();
         TopControls.TogglePlay(true);
         TopControls.EnableControls(true);
+        TopControls.Time = FullGameTime;
     }
 
     private void CreateAllCards() {
@@ -50,7 +51,7 @@ public class Gameplay : MonoBehaviour {
     }
 
     public void UI_PauseClicked() {
-        CardGrid.ToggleVisibility(false);
+        CardGrid.SetAlpha(0.2f);
         TopControls.TogglePlay(true);
         gameRunning = false;
     }
@@ -63,7 +64,7 @@ public class Gameplay : MonoBehaviour {
         if (pairsRemaining == 0) {
             StartGame();
         } else {
-            CardGrid.ToggleVisibility(true);
+            CardGrid.SetAlpha(1f);
             TopControls.TogglePlay(false);
             gameRunning = true;
         }
@@ -74,7 +75,7 @@ public class Gameplay : MonoBehaviour {
         firstCardOfPair = secondCardOfPair = null;
         TopControls.EnableControls(false);
         TopControls.TogglePlay(false);
-        CardGrid.ToggleVisibility(true);
+        CardGrid.SetAlpha(1f);
 
         pairsRemaining = Faces.Count;
         currentTime = FullGameTime;
@@ -110,8 +111,7 @@ public class Gameplay : MonoBehaviour {
             currentTime -= Time.deltaTime;
             TopControls.Time = currentTime;
             if(currentTime <= 0) {
-                Debug.Log("YOU LOSE");
-                gameRunning = false;
+                PlayerLost();
             }
        } 
     }
@@ -139,7 +139,7 @@ public class Gameplay : MonoBehaviour {
 
                 pairsRemaining--;
                 if (pairsRemaining == 0) {
-                    Debug.Log("YOU WIN");
+                    PlayerWon();
                 }
             } else {
                 StartCoroutine(WaitAndHidePairFail());
@@ -154,5 +154,21 @@ public class Gameplay : MonoBehaviour {
         firstCardOfPair = secondCardOfPair = null;
     }
 
-    
+    private void PlayerLost() {
+        TopControls.ShowLose();
+        gameRunning = false;
+
+        for (int i = 0; i < allCards.Count; i++) {
+            allCards[i].Show();
+        }
+        
+        TopControls.TogglePlay(true);
+        CardGrid.SetAlpha(0.5f);
+    }
+
+    private void PlayerWon() {
+        TopControls.ShowWin();
+        gameRunning = false;
+        TopControls.TogglePlay(true);
+    }
 }

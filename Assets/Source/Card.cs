@@ -7,6 +7,7 @@ public class Card : MonoBehaviour {
 
     private Animator animator;
     private int index;
+    private bool isShowing;
 
     public int Index {
         get {
@@ -33,18 +34,24 @@ public class Card : MonoBehaviour {
     }
 
     public void Show() {
-        animator.SetTrigger("ShowMe");
-        transform.SetAsLastSibling();
+        if (!isShowing) {
+            animator.SetTrigger("ShowMe");
+            transform.SetAsLastSibling();
+            isShowing = true;
+        }
     }
 
     public void Hide(bool animate = true) {
         if (animate) {
-            animator.SetTrigger("HideMe");
-            transform.SetAsLastSibling();
+            if (isShowing) {
+                animator.SetTrigger("HideMe");
+                transform.SetAsLastSibling();
+            }
         }else {
             animator.Play("Iddle");
             ResetTriggers();
         }
+        isShowing = false;
     }
 
     public void Win() {

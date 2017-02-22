@@ -149,6 +149,7 @@ public class Gameplay : MonoBehaviour {
            
     private IEnumerator WaitAndHidePairFail() { 
         yield return new WaitForSeconds(ShowPairFailTime);
+        Debug.Log("hide pair");
         firstCardOfPair.Hide();
         secondCardOfPair.Hide();
         firstCardOfPair = secondCardOfPair = null;
@@ -157,6 +158,7 @@ public class Gameplay : MonoBehaviour {
     private void PlayerLost() {
         TopControls.ShowLose();
         gameRunning = false;
+        StopAllCoroutines();
 
         for (int i = 0; i < allCards.Count; i++) {
             allCards[i].Show();
@@ -164,11 +166,13 @@ public class Gameplay : MonoBehaviour {
         
         TopControls.TogglePlay(true);
         CardGrid.SetAlpha(0.5f);
+        pairsRemaining = 0;
     }
 
     private void PlayerWon() {
         TopControls.ShowWin();
         gameRunning = false;
+        StopAllCoroutines();
         TopControls.TogglePlay(true);
     }
 }

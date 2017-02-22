@@ -35,6 +35,7 @@ public class Card : MonoBehaviour {
 
     public void Show() {
         if (!isShowing) {
+            animator.Play("Iddle");
             animator.SetTrigger("ShowMe");
             transform.SetAsLastSibling();
             isShowing = true;

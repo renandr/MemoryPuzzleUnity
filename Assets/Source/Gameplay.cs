@@ -108,7 +108,7 @@ public class Gameplay : MonoBehaviour {
     private void Update() {
        if(gameRunning) {
             currentTime -= Time.deltaTime;
-            Debug.Log(string.Format("{0:00}:{1:00}", (int)(currentTime/60), (int)(currentTime % 60)));
+            TopControls.Time = currentTime;
             if(currentTime <= 0) {
                 Debug.Log("YOU LOSE");
                 gameRunning = false;

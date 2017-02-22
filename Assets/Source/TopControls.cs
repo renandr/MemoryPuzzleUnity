@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 public class TopControls : MonoBehaviour {
 
+    public Text TimerText;
     public Button ReplayButton;
     public Button PauseButton;
     public GameObject PauseButtonGO;
@@ -17,6 +18,12 @@ public class TopControls : MonoBehaviour {
     public void TogglePlay(bool showPlay) {
         PlayButtonGO.SetActive(showPlay);
         PauseButtonGO.SetActive(!showPlay);
+    }
+
+    public float Time {
+        set {
+            TimerText.text = string.Format("{0:00}:{1:00}", (int)(value / 60), (int)(value % 60));
+        }
     }
     
 

@@ -15,10 +15,6 @@ public class Grid : MonoBehaviour {
         myRectTransform = GetComponent<RectTransform>();
         canvasRect = GetComponentInParent<Canvas>().GetComponent<RectTransform>();
     }
-
-    private void Start() {
-        
-    }
     
     public void AddItems(List<GameObject> items) {
         allItems = items;
